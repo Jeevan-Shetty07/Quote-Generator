@@ -1,96 +1,65 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const quoteElement = document.getElementById("quote");
-  const authorElement = document.getElementById("author");
-  const newQuoteBtn = document.getElementById("new-quote");
-  const copyQuoteBtn = document.getElementById("copy-quote");
-  const copyMsg = document.getElementById("copyMsg");
+// script.js
+const quoteElement = document.getElementById("quote");
+const authorElement = document.getElementById("author");
+const newQuoteBtn = document.getElementById("new-quote");
+const copyQuoteBtn = document.getElementById("copy-quote");
+const copyMsg = document.getElementById("copyMsg");
 
-  let quoteInterval = null;
+let currentQuote = "";
 
-  async function fetchQuote() {
-    try {
-      quoteElement.innerHTML = `<span class="loading-text">Loading quote<span class="dots"></span></span>`;
-      authorElement.textContent = "";
+// Fetch a random quote from Quotable API
+async function fetchQuote() {
+  // Show loading state
+  quoteElement.textContent = "Loading quote";
+  quoteElement.classList.add("loading-text");
+  authorElement.textContent = "";
 
-      const response = await fetch("https://api.quotable.io/random", {
-        mode: 'cors',
-        credentials: 'omit',
-        cache: 'no-cache'
-      });
+  try {
+    const response = await fetch("https://api.quotable.io/random?tags=inspirational|motivational|life|success");
+    if (!response.ok) throw new Error("Failed to fetch quote");
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const data = await response.json();
-
-      quoteElement.textContent = `"${data.content}"`;
-      authorElement.textContent = data.author ? `— ${data.author}` : "— Unknown";
-    } catch (error) {
-      console.error("Error fetching quote:", error);
-      quoteElement.textContent = "Failed to load quote. Try again.";
-      authorElement.textContent = "";
-    }
+    const data = await response.json();
+    displayQuote(data.content, data.author);
+  } catch (error) {
+    quoteElement.textContent = "Oops! Something went wrong. Try again.";
+    quoteElement.classList.remove("loading-text");
+    authorElement.textContent = "";
+    console.error("Error fetching quote:", error);
   }
+}
 
-  function copyQuote() {
-    const quoteText = quoteElement.textContent?.trim() || '';
-    const authorText = authorElement.textContent?.trim() || '';
-    const fullQuote = `"${quoteText}" ${authorText}`;
+// Display quote and author
+function displayQuote(quote, author) {
+  currentQuote = `"${quote}" — ${author}`;
+  quoteElement.textContent = quote;
+  authorElement.textContent = `— ${author}`;
+  quoteElement.classList.remove("loading-text");
+  copyMsg.style.display = "none"; // Hide copy message on new quote
+}
 
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(fullQuote)
-        .then(() => showCopyMsg())
-        .catch(() => fallbackCopy(fullQuote));
-    } else {
-      fallbackCopy(fullQuote);
-    }
-  }
-
-  function fallbackCopy(text) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    textArea.style.opacity = "0";
-    textArea.setAttribute("readonly", "");
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const success = document.execCommand("copy");
-      if (success) showCopyMsg();
-    } catch (err) {
-      console.error("Copy failed:", err);
-    }
-    document.body.removeChild(textArea);
-  }
-
-  function showCopyMsg() {
+// Copy quote to clipboard
+function copyToClipboard() {
+  navigator.clipboard.writeText(currentQuote).then(() => {
     copyMsg.style.display = "block";
-    clearTimeout(showCopyMsg.timeout);
-    showCopyMsg.timeout = setTimeout(() => {
+    setTimeout(() => {
       copyMsg.style.display = "none";
     }, 2000);
-  }
-
-  function startAutoRefresh() {
-    quoteInterval = setInterval(() => {
-      if (!document.hidden) fetchQuote();
-    }, 30000);
-  }
-
-  // Event Listeners
-  newQuoteBtn.addEventListener("click", fetchQuote);
-  copyQuoteBtn.addEventListener("click", copyQuote);
-
-  // Init
-  fetchQuote();
-  startAutoRefresh();
-
-  // Restart interval when tab becomes visible
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && !quoteInterval) {
-      startAutoRefresh();
-    }
+  }).catch(err => {
+    console.error("Failed to copy: ", err);
+    copyMsg.textContent = "Failed to copy!";
+    copyMsg.style.color = "#ff6b6b";
+    copyMsg.style.display = "block";
+    setTimeout(() => {
+      copyMsg.style.display = "none";
+      copyMsg.textContent = "Quote copied to clipboard!";
+      copyMsg.style.color = "#00ff90";
+    }, 2000);
   });
-});
+}
+
+// Event Listeners
+newQuoteBtn.addEventListener("click", fetchQuote);
+copyQuoteBtn.addEventListener("click", copyToClipboard);
+
+// Load first quote on page load
+window.addEventListener("load", fetchQuote);
