@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Quote Generator (API Version)</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZenQuote Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>💬 Live Quote Generator</h1>
+    <h1>✨ ZenQuote Generator ✨</h1>
     <div class="quote-box">
       <p id="quote">Loading quote...</p>
       <h3 id="author"></h3>
+      <div class="buttons">
+        <button id="new-quote">🌀 New Quote</button>
+        <button id="copy-quote">📋 Copy</button>
+      </div>
     </div>
-    <button id="btn">New Quote</button>
   </div>
+
+  <pre class="signature">// — by Jeevan 🦇</pre>
 
   <script src="script.js"></script>
 </body>
