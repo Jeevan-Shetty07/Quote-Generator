@@ -1,93 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #141e30, #243b55);
-  color: #fff;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  text-align: center;
-  overflow: hidden;
+  background: linear-gradient(135deg, #2e2e2e, #000);
+  color: #fff;
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 30px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  width: 350px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 500px;
 }
 
 h1 {
+  margin-bottom: 25px;
   font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: #ffcc70;
+  color: #ffcc00;
 }
 
 .quote-box {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  min-height: 120px;
 }
 
 #quote {
   font-size: 1.2rem;
-  margin-bottom: 15px;
+  font-style: italic;
+  margin-bottom: 10px;
 }
 
 #author {
+  margin-top: 15px;
+  color: #ffcc00;
+  font-weight: 500;
   font-size: 1rem;
-  color: #ffcc70;
-  font-style: italic;
 }
 
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 15px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 button {
-  background: #ffcc70;
+  padding: 10px 25px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
+  border-radius: 25px;
+  background: #ffcc00;
+  color: #000;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background: #ffb347;
+  background: #fff;
+  color: #000;
   transform: scale(1.05);
 }
 
-/* Floating Signature Animation */
-.signature {
-  position: fixed;
-  bottom: 20px;
-  right: 30px;
-  font-family: "Courier New", monospace;
-  color: #ffcc70;
-  font-size: 1rem;
-  opacity: 0.7;
-  animation: floaty 6s ease-in-out infinite;
+#copyMsg {
+  margin-top: 10px;
+  color: #00ff90;
+  font-size: 14px;
+  display: none;
+  font-weight: 500;
 }
 
-@keyframes floaty {
-  0% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
+.signature {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.3);
+  font-family: monospace;
+  font-size: 0.9rem;
 }

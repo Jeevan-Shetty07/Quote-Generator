@@ -1,18 +1,40 @@
-async function getQuote() {
-  quoteEl.textContent = "Fetching quote...";
-  authorEl.textContent = "";
+const quoteElement = document.getElementById('quote');
+const authorElement = document.getElementById('author');
+const newQuoteBtn = document.getElementById('new-quote');
+const copyQuoteBtn = document.getElementById('copy-quote');
+const copyMsg = document.getElementById('copyMsg');
 
+async function fetchQuote() {
   try {
-    const response = await fetch("https://zenquotes.io/api/random");
-    const data = await response.json();
-    const quoteData = data[0];
+    quoteElement.textContent = "Loading quote...";
+    authorElement.textContent = "";
 
-    quoteEl.textContent = `"${quoteData.q}"`;
-    authorEl.textContent = `– ${quoteData.a}`;
-    copyMsg.style.display = "none";
+    const response = await fetch('https://api.quotable.io/random');
+    const data = await response.json();
+    console.log(response);
+    
+
+    quoteElement.textContent = `"${data.content}"`;
+    authorElement.textContent = data.author ? `— ${data.author}` : "— Unknown";
   } catch (error) {
-    console.error("Error fetching quote:", error);
-    quoteEl.textContent = "Oops! Couldn't fetch a quote 😢";
-    authorEl.textContent = "Try again later.";
+    quoteElement.textContent = "Failed to load quote. Try again.";
+    authorElement.textContent = "";
   }
 }
+
+// Copy quote to clipboard
+function copyQuote() {
+  const fullQuote = `"${quoteElement.textContent}" ${authorElement.textContent}`;
+  navigator.clipboard.writeText(fullQuote).then(() => {
+    copyMsg.style.display = 'block';
+    setTimeout(() => {
+      copyMsg.style.display = 'none';
+    }, 2000);
+  });
+}
+
+
+newQuoteBtn.addEventListener('click', fetchQuote);
+copyQuoteBtn.addEventListener('click', copyQuote);
+
+fetchQuote();
