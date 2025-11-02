@@ -10,10 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
       quoteElement.innerHTML = `<span class="loading-text">Loading quote<span class="dots"></span></span>`;
       authorElement.textContent = "";
 
-      const response = await fetch("https://api.quotable.io/random", {
-        cache: "no-cache",
-        mode: "cors",
-      });
+      // Avoid forcing cache/mode (for Samsung compatibility)
+      const response = await fetch("https://api.quotable.io/random");
       const data = await response.json();
 
       quoteElement.textContent = `"${data.content}"`;
@@ -29,12 +27,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function copyQuote() {
     const fullQuote = `"${quoteElement.textContent}" ${authorElement.textContent}`;
-    navigator.clipboard.writeText(fullQuote).then(() => {
-      copyMsg.style.display = "block";
-      setTimeout(() => {
-        copyMsg.style.display = "none";
-      }, 2000);
-    });
+
+    // ✅ Works on Samsung Internet too
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullQuote)
+        .then(() => showCopyMsg())
+        .catch(() => fallbackCopy(fullQuote));
+    } else {
+      fallbackCopy(fullQuote);
+    }
+  }
+
+  // ✨ Fallback copy method (for older browsers)
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand("copy");
+      showCopyMsg();
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function showCopyMsg() {
+    copyMsg.style.display = "block";
+    setTimeout(() => {
+      copyMsg.style.display = "none";
+    }, 2000);
   }
 
   // Buttons
@@ -42,6 +67,5 @@ document.addEventListener("DOMContentLoaded", () => {
   copyQuoteBtn.addEventListener("click", copyQuote);
 
   fetchQuote();
-
   setInterval(fetchQuote, 30000);
 });
