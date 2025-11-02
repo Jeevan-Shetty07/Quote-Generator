@@ -43,5 +43,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fetchQuote();
 
-  setInterval(fetchQuote, 10000);
+  setInterval(fetchQuote, 100000);
 });
