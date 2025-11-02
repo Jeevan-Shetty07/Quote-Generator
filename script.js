@@ -4,26 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const newQuoteBtn = document.getElementById("new-quote");
   const copyQuoteBtn = document.getElementById("copy-quote");
   const copyMsg = document.getElementById("copyMsg");
+async function fetchQuote() {
+  try {
+    quoteElement.innerHTML = `<span class="loading-text">Loading quote<span class="dots"></span></span>`;
+    authorElement.textContent = "";
 
-  async function fetchQuote() {
-    try {
-      quoteElement.innerHTML = `<span class="loading-text">Loading quote<span class="dots"></span></span>`;
-      authorElement.textContent = "";
+    // Use a proxy to fix CORS issues
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const apiUrl = encodeURIComponent("https://api.quotable.io/random");
 
-      // Avoid forcing cache/mode (for Samsung compatibility)
-      const response = await fetch("https://api.quotable.io/random");
-      const data = await response.json();
+    const response = await fetch(proxyUrl + apiUrl);
+    const data = await response.json();
+    const quoteData = JSON.parse(data.contents);
 
-      quoteElement.textContent = `"${data.content}"`;
-      authorElement.textContent = data.author
-        ? `— ${data.author}`
-        : "— Unknown";
-    } catch (error) {
-      console.error("Error fetching quote:", error);
-      quoteElement.textContent = "Failed to load quote. Try again.";
-      authorElement.textContent = "";
-    }
+    quoteElement.textContent = `"${quoteData.content}"`;
+    authorElement.textContent = quoteData.author ? `— ${quoteData.author}` : "— Unknown";
+  } catch (error) {
+    console.error("Error fetching quote:", error);
+    quoteElement.textContent = "Failed to load quote. Try again.";
+    authorElement.textContent = "";
   }
+}
+
 
   function copyQuote() {
     const fullQuote = `"${quoteElement.textContent}" ${authorElement.textContent}`;
