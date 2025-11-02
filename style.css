@@ -83,16 +83,26 @@ button:hover {
   font-weight: 500;
 }
 
+/* --- Glowing Signature --- */
 .signature {
   position: fixed;
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.3);
+  color: #ffcc00;
   font-family: monospace;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  opacity: 0.7;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+  animation: pulseGlow 2.5s ease-in-out infinite;
 }
-/* Simple loading dots animation */
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 204, 0, 0.4); }
+  50% { opacity: 1; text-shadow: 0 0 15px rgba(255, 204, 0, 1); }
+}
+
+/* Loading animation */
 .loading-text {
   font-style: italic;
   color: #888;
@@ -108,9 +118,4 @@ button:hover {
   33% { content: '.'; }
   66% { content: '..'; }
   100% { content: '...'; }
-}
-
-/* Optional fade effect for quote updates */
-#quote, #author {
-  transition: opacity 0.4s ease;
 }
