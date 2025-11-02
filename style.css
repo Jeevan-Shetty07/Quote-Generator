@@ -92,3 +92,25 @@ button:hover {
   font-family: monospace;
   font-size: 0.9rem;
 }
+/* Simple loading dots animation */
+.loading-text {
+  font-style: italic;
+  color: #888;
+}
+
+.dots::after {
+  content: '';
+  animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  33% { content: '.'; }
+  66% { content: '..'; }
+  100% { content: '...'; }
+}
+
+/* Optional fade effect for quote updates */
+#quote, #author {
+  transition: opacity 0.4s ease;
+}

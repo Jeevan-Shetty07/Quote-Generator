@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchQuote() {
     try {
-      quoteElement.textContent = "Loading quote...";
+      // Show animated loading text
+      quoteElement.innerHTML = `<span class="loading-text">Loading quote<span class="dots"></span></span>`;
       authorElement.textContent = "";
 
       const response = await fetch('https://api.quotable.io/random');
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       quoteElement.textContent = `"${data.content}"`;
       authorElement.textContent = data.author ? `— ${data.author}` : "— Unknown";
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching quote:", error);
       quoteElement.textContent = "Failed to load quote. Try again.";
       authorElement.textContent = "";
     }
@@ -32,9 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Buttons
   newQuoteBtn.addEventListener('click', fetchQuote);
   copyQuoteBtn.addEventListener('click', copyQuote);
 
-  
+ 
   fetchQuote();
+
+  
+  setInterval(fetchQuote, 10000);
 });
