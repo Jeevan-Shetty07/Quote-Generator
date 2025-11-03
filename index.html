@@ -6,18 +6,44 @@
   <title>ZenQuote Generator</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
-    <h1>✨ Quote Generator ✨</h1>
+    <div class="header">
+      <h1>✨ Quote-Generator ✨</h1>
+      <button id="theme-toggle" title="Toggle Theme">🌙</button>
+    </div>
+
     <div class="quote-box">
       <p id="quote" class="loading-text">Loading quote<span class="dots"></span></p>
       <h3 id="author"></h3>
+
       <div class="buttons">
-        <button id="new-quote">🌀 New Quote</button>
-        <button id="copy-quote">📋 Copy</button>
+        <button id="new-quote"><i class="fas fa-sync-alt"></i> New Quote</button>
+        <button id="copy-quote"><i class="fas fa-copy"></i> Copy</button>
+        <button id="share-twitter"><i class="fab fa-x-twitter"></i> Share</button>
+        <button id="favorite-quote"><i class="fas fa-heart"></i> Save</button>
       </div>
-      <p id="copyMsg">Quote copied to clipboard!</p>
+
+      <p id="copyMsg">Quote copied!</p>
+      <p id="favMsg">Saved to favorites! ❤️</p>
+    </div>
+
+    <button id="view-favorites" class="view-fav-btn">View Favorites (<span id="fav-count">0</span>)</button>
+  </div>
+
+  <!-- Favorites Modal -->
+  <div id="favorites-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Favorite Quotes</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div id="favorites-list"></div>
+      <div class="modal-footer">
+        <button id="clear-favorites">Clear All</button>
+      </div>
     </div>
   </div>
 
